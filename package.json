@@ -1,0 +1,53 @@
+{
+  "name": "bacstack-device",
+  "version": "0.0.1",
+  "description": "A BACnet device simulator using Node BACstack.",
+  "main": "index.js",
+  "scripts": {
+    "changelog": "commitlint --from=master",
+    "lint": "jshint lib/ test/ index.js && jscs lib/ test/ index.js",
+    "test": "istanbul cover --dir reports/coverage node_modules/mocha/bin/_mocha -- test/*.spec.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fh1ch/node-bacstack-device.git"
+  },
+  "keywords": [
+    "bacnet",
+    "bacstack",
+    "building",
+    "automation"
+  ],
+  "author": {
+    "name": "Fabio Huser",
+    "email": "fabio@fh1.ch"
+  },
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fh1ch/node-bacstack-device/issues"
+  },
+  "homepage": "https://github.com/fh1ch/node-bacstack-device#readme",
+  "dependencies": {
+    "bacstack": "0.0.1-beta.13",
+    "debug": "^3.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^5.2.5",
+    "@commitlint/config-conventional": "^5.2.3",
+    "@commitlint/travis-cli": "^5.2.5",
+    "chai": "^4.1.2",
+    "istanbul": "^0.4.5",
+    "jscs": "^3.0.7",
+    "jshint": "^2.9.5",
+    "mocha": "^4.0.1"
+  }
+}
