@@ -51,18 +51,31 @@ client.on('readProperty', (data) => {
 });
 
 client.on('writeProperty', (data) => {
-  const object = dataStore[data.request.objectId.type + ':' + data.request.objectId.instance];
-  if (!object) return client.errorResponse(data.address, data.service, data.invokeId, bacnet.enum.ErrorClasses.ERROR_CLASS_OBJECT, bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_OBJECT);
-  const property = object[data.request.property.id];
-  if (!property) return client.errorResponse(data.address, data.service, data.invokeId, bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY, bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_PROPERTY);
-  if (data.request.property.index === 0xFFFFFFFF) {
-    property = data.request.value.value;
-    client.simpleAckResponse(data.address, data.service, data.invokeId);
+  const object =
+      dataStore[data.request.objectId.type + ':' + data.request.objectId.instance];
+  if (!object)
+    return client.errorResponse(
+        data.address, data.service, data.invokeId,
+        bacnet.enum.ErrorClasses.ERROR_CLASS_OBJECT,
+        bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_OBJECT);
+  property = object[data.request.value.property.id];
+  if (!property)
+    return client.errorResponse(
+        data.address, data.service, data.invokeId,
+        bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY,
+        bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_PROPERTY);
+  if (data.request.value.property.index === 0xFFFFFFFF) {
+    property[0].value = data.request.value.value[0].value;
+    client.simpleAckResponse(data.address, bacnet.enum.ConfirmedServices.SERVICE_CONFIRMED_WRITE_PROPERTY, data.invokeId);
   } else {
-    const slot = property[data.request.property.index];
-    if (!slot) return client.errorResponse(data.address, data.service, data.invokeId, bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY, bacnet.enum.ErrorCodes.ERROR_CODE_INVALID_ARRAY_INDEX);
-    slot = data.request.value.value[0];
-    client.simpleAckResponse(data.address, data.service, data.invokeId);
+    slot = property[data.request.value.property.index];
+    if (!slot)
+      return client.errorResponse(
+          data.address, data.service, data.invokeId,
+          bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY,
+          bacnet.enum.ErrorCodes.ERROR_CODE_INVALID_ARRAY_INDEX);
+    slot.value = data.request.value.value[0].value;
+    client.simpleAckResponse(data.address, bacnet.enum.ConfirmedServices.SERVICE_CONFIRMED_WRITE_PROPERTY, data.invokeId);
   }
 });
 
